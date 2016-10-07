@@ -1,0 +1,65 @@
+
+##1 
+
+setwd("C:/Users/AndersonL/Desktop/coursera")
+fileURL <- "http://d396qusza40orc.cloudfront.net/getdata%2Fdata%2Fss06hid.csv"
+download.file(fileURL,"./coursedata/idaho2006.csv")
+
+data <- read.csv("./coursedata/idaho2006.csv")
+head(data)
+
+agricultureLogical <- ifelse(data$ACR == 3 & data$AGS == 6,TRUE,FALSE)
+which(agricultureLogical)
+
+
+
+
+
+##2
+
+setwd("C:/Users/AndersonL/Desktop/coursera")
+
+file.url <- "https://d396qusza40orc.cloudfront.net/getdata%2Fjeff.jpg"
+download.file(file.url, "./coursedata/jeff.jpg", mode = "wb")
+library(jpeg)
+
+pic <- readJPEG("./coursedata/jeff.jpg", native = TRUE)
+quantile(pic, probs= c(0.3, 0.8))
+
+
+
+##3
+setwd("C:/Users/AndersonL/Desktop/coursera")
+library(data.table)
+library(dplyr)
+
+file.url1<- "http://d396qusza40orc.cloudfront.net/getdata%2Fdata%2FGDP.csv"
+file.url2 <- "http://d396qusza40orc.cloudfront.net/getdata%2Fdata%2FEDSTATS_Country.csv"
+
+dest1 <- "./coursedata/GDP.csv"
+dest2 <- "./coursedata/EDU.csv"
+
+download.file(file.url1, dest1, mode = "wb")
+download.file(file.url2, dest2, mode = "wb")
+
+gdp =fread(dest1,skip = 4, nrows = 190, select = c(1,2,4,5), col.names =c("CountryCode", "Rank", "Economy", "Total"))
+edu = fread(dest2)
+
+combined = merge(gdp, edu, by = "CountryCode")
+View(combined)
+
+combined2 = arrange(combined, desc(Rank))
+View(combined2)
+
+combined2[13,3]
+
+
+##4
+
+tapply(combined$Rank, combined$`Income Group`, mean)
+
+##5
+
+library(Hmisc)
+combined$RankGroups <- cut2(combined$Rank, g=5)
+table(combined$RankGroups, combined$`Income Group`)

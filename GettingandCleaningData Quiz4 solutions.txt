@@ -1,0 +1,75 @@
+##1
+
+setwd("C:/Users/AndersonL/Desktop/coursera")
+
+fileURL <- "http://d396qusza40orc.cloudfront.net/getdata%2Fdata%2Fss06hid.csv"
+download.file(fileURL,"./coursedata/idaho2006.csv")
+
+data <- read.csv("./coursedata/idaho2006.csv")
+
+strsplit(names(data),"wgtp")
+
+newnames <- strsplit(names(data),"wgtp")
+newnames[[123]]
+
+
+
+##2 & 3
+
+setwd("C:/Users/AndersonL/Desktop/coursera")
+library(data.table)
+library(dplyr)
+
+file.url<- "http://d396qusza40orc.cloudfront.net/getdata%2Fdata%2FGDP.csv"
+dest <- "./coursedata/GDP.csv"
+download.file(file.url, dest, mode = "wb")
+
+gdp =fread(dest,skip = 4, nrows = 190, select = c(1,2,4,5), col.names =c("CountryCode", "Rank", "Economy", "Total"))
+
+gdp1 <- gsub("," , "", gdp$Total)
+gdp1 <- as.integer(gdp1)
+mean(gdp1, na.rm = TRUE)
+
+united <- grep("^United", gdp$Economy)
+length(united
+
+
+
+#4
+
+
+setwd("C:/Users/AndersonL/Desktop/coursera")
+library(data.table)
+library(dplyr)
+
+file.url1<- "http://d396qusza40orc.cloudfront.net/getdata%2Fdata%2FGDP.csv"
+file.url2 <- "http://d396qusza40orc.cloudfront.net/getdata%2Fdata%2FEDSTATS_Country.csv"
+
+dest1 <- "./coursedata/GDP.csv"
+dest2 <- "./coursedata/EDU.csv"
+
+download.file(file.url1, dest1, mode = "wb")
+download.file(file.url2, dest2, mode = "wb")
+
+gdp =fread(dest1,skip = 4, nrows = 190, select = c(1,2,4,5), col.names =c("CountryCode", "Rank", "Economy", "Total"))
+edu = fread(dest2)
+
+combined = merge(gdp, edu, by = "CountryCode")
+View(combined)
+
+fiscal <- grep("Fiscal year end: June", combined$`Special Notes`)
+length(fiscal)
+
+
+
+##5
+
+setwd("C:/Users/AndersonL/Desktop/coursera")
+library(quantmod)
+amzn = getSymbols("AMZN",auto.assign=FALSE)
+sampleTimes = index(amzn)
+
+date <- format(sampleTimes, "%a %Y")
+length(grep("2012", date))
+
+length(grep("Mon 2012", date))
